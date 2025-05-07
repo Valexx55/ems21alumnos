@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -31,10 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.kyndryl.academy.msalumnos.client.ClienteFeignCurso;
 import edu.kyndryl.academy.msalumnos.model.FraseChiquito;
+import edu.kyndryl.academy.msalumnos.model.FraseChuckNorris;
 import edu.kyndryl.academy.msalumnos.service.AlumnoService;
 import edu.kyndryl.academy.mscomun.entity.Alumno;
 import edu.kyndryl.academy.mscomun.entity.Curso;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 
 
@@ -74,6 +77,18 @@ public class AlumnoController {
 	
 	Logger logger = LoggerFactory.getLogger(AlumnoController.class);//dame un log para esta clase
 	
+	@Value("${mientorno}")
+	String entorno;
+	
+	
+	@PostConstruct
+	public void postCreacion ()
+	{
+		//este método se ejecuta después que Spring instancie AlumnoController
+		logger.debug("Estamos en PostConstruct del entorno " + this.entorno);
+	}
+	
+	
 	//yo a Spring le digo oye: si recibes un GET localhost:8081/alumno/obtener-alumno-test
 	//invocas a este método
 	@GetMapping("/obtener-alumno-test")
@@ -85,7 +100,7 @@ public class AlumnoController {
 			alumno = new Alumno("Laura", 60, "Gómez", "laura@kyndryl.com");
 			logger.debug("Alumno " + alumno.toString());
 			logger.debug("Final obtenerAlumnoTest");
-			alumno.getNombre().charAt(5);
+			//alumno.getNombre().charAt(5);
 			//TODO COMENTAR TOSTRING EN ENTITADES Y BEANS LOG
 		
 		return alumno;//SERIALIZA Objeto de Java - A String JSON
@@ -243,6 +258,27 @@ public class AlumnoController {
 		return responseEntity;
 	}
 	
+	//https://www.google.com/search?client=ubuntu-sn&channel=fs&q=real+madrid
+	
+	@GetMapping("/listarAlumnosPorRangoEdadPaginado") //GET localhost:8081/alumno/listarAlumnosPorRangoEdadPaginado?edadmin=10&edadmax=20&page=0&size=3 
+	public ResponseEntity<Iterable<Alumno>> listarAlumnosPorRangoEdadPaginado(
+			@RequestParam(name = "edadmin", required = true) int edadmin,
+			@RequestParam(name = "edadmax", required = true) int edadmax,
+			Pageable pageable
+			)
+	{
+		ResponseEntity<Iterable<Alumno>> responseEntity = null;
+		
+		
+			logger.debug("EN listarAlumnosPorRangoEdadPaginado()");
+			Iterable<Alumno> listadoAlumnos = alumnoService.consultarAlumnosPorPaginaYPorEdad(edadmin, edadmax, pageable);
+			responseEntity = ResponseEntity.ok(listadoAlumnos);
+			logger.debug("listado alumnos " + listadoAlumnos);
+			
+			
+		return responseEntity;
+	}
+	
 	
 	@GetMapping("/obtenerFraseChiquito") //GET localhost:8081/alumno/obtenerFraseChiquito
 	public ResponseEntity<FraseChiquito> obtenerFraseChiquito()
@@ -265,6 +301,28 @@ public class AlumnoController {
 		return responseEntity;
 	}
 	
+	
+	//TODO: CREAR UN NUEVO SERVICIO WEB DENTRO DE ALUMNOS CONTROLLER, QUE OBTENGA UNA FRASE ALEATORIA
+	//DEL SERVIDOR REST DE CHUCK NORRIS, REPRESENTADO POR LA SIGUIENTE URL https://api.chucknorris.io/jokes/random
+	//os dejo hasta las 12
+	
+	//@GetMapping("/obtenerFraseChuck") //GET localhost:8081/alumno/obtenerFraseChuck
+	@GetMapping("/obtenerFraseChuck")
+	public ResponseEntity<FraseChuckNorris> obtenerFraseChuckNorris()
+	{
+		ResponseEntity<FraseChuckNorris> responseEntity = null;
+		FraseChuckNorris fraseChuck = null;
+		
+			logger.debug("EN obtenerFraseChuckNorris()");
+			fraseChuck = alumnoService.obtenerFraseAleatoriaChuckNorris();
+			responseEntity = ResponseEntity.ok(fraseChuck);
+			logger.debug("Frase obtenida " + fraseChuck.toString());
+			
+			
+		return responseEntity;
+	}
+	
+	
 	//obtenerCursoAlumno: recibo un id de alumno y devuelvo el curso en que está matriculado
 		@GetMapping("/obtener-curso-alumno-via-feign/{idalumno}") 
 		public ResponseEntity<?> obtenerCursoAlumnoViaFeign(@PathVariable Long idalumno) 
@@ -285,6 +343,19 @@ public class AlumnoController {
 		
 			return responseEntity;
 
+		}
+		
+		@GetMapping("/pagina") //GET http://localhost:5665/alumno/pagina?page=1&size=3
+		public ResponseEntity<Iterable<Alumno>> listarAlumnosPorPagina(Pageable pageable)
+		{
+			ResponseEntity<Iterable<Alumno>> respuesta = null;
+			Iterable<Alumno> pagina = null;
+			
+				pagina = this.alumnoService.consultarAlumnosPorPagina(pageable);
+				respuesta =  ResponseEntity.ok(pagina);
+				
+			
+			return respuesta;
 		}
 	
 	

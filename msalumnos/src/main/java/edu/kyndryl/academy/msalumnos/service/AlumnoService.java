@@ -2,7 +2,14 @@ package edu.kyndryl.academy.msalumnos.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+
+//import org.springframework.data.domain.Pageable;
+
+//import org.springframework.data.domain.Pageable;
+
 import edu.kyndryl.academy.msalumnos.model.FraseChiquito;
+import edu.kyndryl.academy.msalumnos.model.FraseChuckNorris;
 import edu.kyndryl.academy.mscomun.entity.Alumno;
 
 /**
@@ -25,6 +32,11 @@ public interface AlumnoService {
 	Iterable<Alumno> buscarAlumnosPorIntervaloDeEdad (int edadmin, int edadmax);
 	//OBTENER FRASE CHIQUITO DE OTRO SERVER
 	Optional<FraseChiquito> obtenerFraseAleatoria ();
-	
+	//OBTENER FRASE CHUCK NORRIS DE OTRO SERVER
+	FraseChuckNorris obtenerFraseAleatoriaChuckNorris ();
+	//OBTENER LOS ALUMNOS POR PÁGINAS / BLOQUES
+	Iterable<Alumno> consultarAlumnosPorPagina (Pageable pageable);
+	//OBTENER LOS ALUMNOS POR PÁGINAS / BLOQUES y por EDAD
+	Iterable<Alumno> consultarAlumnosPorPaginaYPorEdad (int edadmin, int edadmax, Pageable pageable);
 
 }

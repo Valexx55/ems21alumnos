@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.kyndryl.academy.msalumnos.controller.AlumnoController;
 import edu.kyndryl.academy.msalumnos.model.FraseChiquito;
+import edu.kyndryl.academy.msalumnos.model.FraseChuckNorris;
 import edu.kyndryl.academy.msalumnos.repository.AlumnoRepository;
 import edu.kyndryl.academy.mscomun.entity.Alumno;
 
@@ -102,7 +104,7 @@ public class AlumnoServiceImp implements AlumnoService {
 	@Override
 	public Optional<FraseChiquito> obtenerFraseAleatoria() {
 		Optional<FraseChiquito> oFrase = Optional.empty();
-		RestTemplate restTemplate = null;
+		RestTemplate restTemplate = null;//CON ESTE OBJETO, PUEDO LANZAR PETICIONES HTTP ESPERAN COMO RESPUESTA UN JSON
 		FraseChiquito fraseChiquito = null;
 		
 			restTemplate = new RestTemplate();
@@ -115,5 +117,35 @@ public class AlumnoServiceImp implements AlumnoService {
 		
 		return oFrase;
 	}
+
+	@Override
+	public FraseChuckNorris obtenerFraseAleatoriaChuckNorris() {
+		FraseChuckNorris fraseChuckNorris = null;
+		RestTemplate restTemplate = null;//CON ESTE OBJETO, PUEDO LANZAR PETICIONES HTTP ESPERAN COMO RESPUESTA UN JSON
+		
+		
+			restTemplate = new RestTemplate();
+			fraseChuckNorris = restTemplate.getForObject("https://api.chucknorris.io/jokes/random", FraseChuckNorris.class);
+			logger.debug("FRASE RX = " + fraseChuckNorris);
+		
+		
+		return fraseChuckNorris;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Alumno> consultarAlumnosPorPagina(Pageable pageable) {
+		
+		return this.alumnoRepository.findAll(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Alumno> consultarAlumnosPorPaginaYPorEdad(int edadmin, int edadmax, Pageable pageable) {
+		
+		return this.alumnoRepository.findByEdadBetween(edadmin, edadmax, pageable);
+	}
+
+	
 
 }

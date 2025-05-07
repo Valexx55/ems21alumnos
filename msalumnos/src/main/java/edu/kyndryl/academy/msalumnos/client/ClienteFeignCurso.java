@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import edu.kyndryl.academy.mscomun.entity.Curso;
 
-@FeignClient(name = "mscursosprofe")
+@FeignClient(name = "mscursos")
 public interface ClienteFeignCurso {
 	
 	@GetMapping("/curso/obtener-curso-alumno/{idalumno}")

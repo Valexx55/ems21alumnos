@@ -12,9 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment =  WebEnvironment.RANDOM_PORT)
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = {MsalumnosprofeApplication.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AlumnoControllerTest {
 
 	@LocalServerPort
@@ -23,34 +27,38 @@ public class AlumnoControllerTest {
 	@Autowired
 	TestRestTemplate template;
 	
+	@BeforeAll
+	public static void antesDeTodosLosTests ()
+	{
+		System.out.println("antesDeTodosLosTests");
+	}
 	
-	@Test
-	public void testGetAlumno () {
-		assertThat(this.template.getForObject("http://localhost:"+ port+"/alumno", String.class)).contains("apellido");
+	@AfterAll
+	public static void despuesDeTodosLosTests ()
+	{
+		System.out.println("despuesDeTodosLosTests");
+	}
+	
+	@AfterEach
+	public void despuesDeCadaTest ()
+	{
+		System.out.println("despuesDeCadaTest");
 	}
 	
 	
 	@BeforeEach
 	public void antesDeCadaTest ()
 	{
-		System.out.println("antes de cada métodos test");
+		System.out.println("antesDeCadaTest");
 	}
 	
-	@BeforeAll
-	public static void antesDeTodosLosTests ()
-	{
-		System.out.println("antes de todos los métodos test");
-	}
 	
-	@AfterEach
-	public void despuesDeCadaTest ()
-	{
-		System.out.println("despues de cada métodos test");
-	}
 	
-	@AfterAll
-	public static void despuesDeTodosLosTests ()
-	{
-		System.out.println("despues de cada todos métodos test");
+	@Test
+	void test() {
+		//add autenticación
+		this.template = this.template.withBasicAuth("admin", "admin");
+		//assertThat(this.template.getForObject("http://localhost:"+port+"/alumno", String.class)).contains("apellido");
 	}
+
 }

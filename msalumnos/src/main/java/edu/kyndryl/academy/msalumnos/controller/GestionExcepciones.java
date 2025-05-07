@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * ESTA CLASE VA A SER COMO UN "LISTENER" / SUMIDERO DE EXCEPCIONES CUALQUIER
  * FALLO EN NUESTRO CÓDIGO, PODEMOS GESTIONARLO AQUÍ
  */
-@RestControllerAdvice(basePackages = { "edu.kyndryl.academy.msalumnosprofe" }) // estoy escuchando los fallos de este
+@RestControllerAdvice(basePackages = { "edu.kyndryl.academy.msalumnos" }) // estoy escuchando los fallos de este
 																				// paquete
 public class GestionExcepciones {
 	
