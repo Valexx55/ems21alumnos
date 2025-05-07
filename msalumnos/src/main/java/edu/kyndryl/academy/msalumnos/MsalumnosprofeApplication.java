@@ -23,6 +23,7 @@ public class MsalumnosprofeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MsalumnosprofeApplication.class, args);
 	}
+	//comentario para forzar jenkis
 	
 	@Bean
 	@Profile("dev")//le digo que instancie esta clase de Alumno sólo si se lanza en modo dev
