@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>edu.kyndryl.academy</groupId>
 	<artifactId>msalumnos</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>msalumnos</name>
 	<description>MicroServicio Alumnos</description>
 	<url />
@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>edu.kyndryl.academy</groupId>
 			<artifactId>mscomun</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>

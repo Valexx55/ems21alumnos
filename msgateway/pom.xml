@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>edu.kyndryl.academy</groupId>
 	<artifactId>msgateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>msgateway</name>
 	<description>Gateway Punto de Entrada</description>
 	<url/>
