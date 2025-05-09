@@ -1,5 +1,7 @@
-package edu.kyndryl.academy.msalumno.controller;
+package edu.kyndryl.academy.msalumnos.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +33,9 @@ public class AlumnoControllerTest2 {
 	@Autowired
 	ObjectMapper om;//es para serializar a JSON el alumno
 	
+	//TEST GET QUE AL INSERTAR UN ALUMNO, A LA VUELTA TUVIERA UN ID
+	//TEST POST PASARLE UN TIPO MIME DISTINTO A JSON , ESPERARÍAMOS UN 404
+	
 	
 	//TEST POST CORRECTO
 	@Test
@@ -46,7 +51,7 @@ public class AlumnoControllerTest2 {
 		// serializar este alumno
 		String alumno_json = objectNode.toString();
 
-		mockMvc.perform(post("/alumno/").contentType(MediaType.APPLICATION_JSON).content(alumno_json))
+		mockMvc.perform(post("/alumno").with(httpBasic("admin", "admin")).contentType(MediaType.APPLICATION_JSON).content(alumno_json))
 				.andExpect(status().isCreated()).andExpect(content().contentType("application/json"));
 
 	}
@@ -65,13 +70,10 @@ public class AlumnoControllerTest2 {
 		// serializar este alumno
 		String alumno_json = objectNode.toString();
 
-		mockMvc.perform(post("/alumno/").contentType(MediaType.APPLICATION_JSON).content(alumno_json))
-				.andExpect(status().is4xxClientError());//.andExpect(content().contentType("application/json"));
-
+		mockMvc.perform(post("/alumno").with(httpBasic("admin", "admin")).contentType(MediaType.APPLICATION_JSON).content(alumno_json))
+		.andExpect(status().isBadRequest());
 	}
 	
-	
-	
-	
+
 
 }

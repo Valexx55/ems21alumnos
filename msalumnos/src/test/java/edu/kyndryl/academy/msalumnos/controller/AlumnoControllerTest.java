@@ -1,4 +1,4 @@
-package edu.kyndryl.academy.msalumno.controller;
+package edu.kyndryl.academy.msalumnos.controller;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest(classes = {MsalumnosprofeApplication.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -52,13 +53,21 @@ public class AlumnoControllerTest {
 		System.out.println("antesDeCadaTest");
 	}
 	
-	
-	
 	@Test
-	void test() {
+	void testOk() {
 		//add autenticación
 		this.template = this.template.withBasicAuth("admin", "admin");
-		//assertThat(this.template.getForObject("http://localhost:"+port+"/alumno", String.class)).contains("apellido");
+		assertThat(this.template.getForObject("http://localhost:"+port+"/alumno", String.class)).contains("apellido");
 	}
+	
+	
+	
+	
+/*	@Test(exd)
+	void testKO() {
+		//add autenticación
+		//this.template = this.template.withBasicAuth("admin", "admin");
+		assertThat(this.template.getForObject("http://localhost:"+port+"/alumno", String.class)).contains("apellido");
+	}*/
 
 }
