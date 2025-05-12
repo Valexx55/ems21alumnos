@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import edu.kyndryl.academy.msalumnos.client.ClienteFeignCurso;
 import edu.kyndryl.academy.msalumnos.model.FraseChiquito;
@@ -101,7 +105,6 @@ public class AlumnoController {
 			logger.debug("Alumno " + alumno.toString());
 			logger.debug("Final obtenerAlumnoTest");
 			//alumno.getNombre().charAt(5);
-			//TODO COMENTAR TOSTRING EN ENTITADES Y BEANS LOG
 		
 		return alumno;//SERIALIZA Objeto de Java - A String JSON
 	}
@@ -127,7 +130,6 @@ public class AlumnoController {
 			try {
 				logger.debug("HOSTNAME "+ InetAddress.getLocalHost().getHostName());
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -191,7 +193,66 @@ public class AlumnoController {
 	}
 	
 	//POST - INSERTAR
-	//@PostMapping("/") //POST localhost:8081/alumno
+	@PostMapping("/insertar-alumno-con-foto") //POST localhost:8081/alumno
+	public ResponseEntity<?> insertarAlumnoConFoto(@Valid Alumno alumno, BindingResult br, MultipartFile archivo) throws Exception
+	{
+		ResponseEntity<?> responseEntity = null;
+		Alumno alumnoInsertado = null;
+		
+			
+			logger.debug("EN insertarAlumnoConfoto()");
+			if (br.hasErrors())
+			{
+				logger.debug("Error en los datos de entrada");
+				responseEntity = obtenerErrores(br);
+			} else {
+				
+				logger.debug("Validación OK");
+				try {
+					if (!archivo.isEmpty())
+					{
+						alumno.setFoto(archivo.getBytes());
+					}
+					
+				}catch (Exception e) {
+					logger.error("Error al accceder al archivo", e);
+					throw e;
+				}
+				
+				
+				alumnoInsertado = alumnoService.alta(alumno);
+				responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(alumnoInsertado);
+				logger.debug("Alumno insertado = " + alumnoInsertado);
+			
+			}
+		
+		return responseEntity;
+	}
+	
+	
+	@GetMapping("/obtenerFoto/{id}") //GET localhost:8081/alumno/obtenerFoto/5 //@PathVariable carga el valor
+	public ResponseEntity<Resource> obtenerFotoAlumnoPorId(@PathVariable  Long id)
+	{
+		ResponseEntity<Resource> responseEntity = null;
+		Alumno alumnoLeido = null;
+		Resource imagen = null;
+		
+			logger.debug("EN listarAlumnoPorId()");
+			Optional<Alumno> oAlumno = alumnoService.consultarPorId(id);
+			if (oAlumno.isPresent() && oAlumno.get().getFoto()!=null)
+			{
+				alumnoLeido = oAlumno.get();
+				imagen = new ByteArrayResource(alumnoLeido.getFoto());
+				responseEntity = ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imagen);
+				logger.debug("Alumno leído " + alumnoLeido);
+			} else {
+				logger.debug("Alumno no encontrado con id " + id);
+				responseEntity = ResponseEntity.noContent().build();
+			}
+			
+		return responseEntity;
+	}
+	
 	@PostMapping //POST localhost:8081/alumno
 	public ResponseEntity<?> insertarAlumno(@Valid @RequestBody Alumno alumno, BindingResult br)
 	{
@@ -215,6 +276,9 @@ public class AlumnoController {
 		
 		return responseEntity;
 	}
+	
+	
+	
 	
 	
 	@PutMapping("/{id}") //PUT localhost:8081/alumno/3
