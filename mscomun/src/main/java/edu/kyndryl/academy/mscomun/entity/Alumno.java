@@ -66,7 +66,7 @@ public class Alumno {
 	private LocalDateTime creadoEn;
 	
 	@Lob
-	//@JsonIgnore //con esta anotación, le digo a spring que no me convierta a Json este atributo
+	@JsonIgnore //con esta anotación, le digo a spring que no me convierta a Json este atributo
 	private byte[] foto;//esta va a ser la foto de cada alumno
 	
 	public byte[] getFoto() {
