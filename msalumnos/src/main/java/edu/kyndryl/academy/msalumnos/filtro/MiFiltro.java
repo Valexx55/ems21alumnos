@@ -29,13 +29,13 @@ public class MiFiltro implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		System.out.println("entrando en filtro");
-		HttpServletRequest hr = (HttpServletRequest) request;
+		/*HttpServletRequest hr = (HttpServletRequest) request;
 		String cadenaAuth = hr.getHeader("Authorization");
 		System.out.println(cadenaAuth);
 		
 		byte[] decodeData = Base64.getDecoder().decode(cadenaAuth.substring(6));
 		String cadenaDecode = new String(decodeData, StandardCharsets.UTF_8);
-		System.out.println(cadenaDecode);
+		System.out.println(cadenaDecode);*/
 		
 		chain.doFilter(request, response);//dejarle pasar
 		System.out.println("saliendo del filtro");

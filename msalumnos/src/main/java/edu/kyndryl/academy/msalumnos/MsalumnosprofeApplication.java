@@ -14,7 +14,7 @@ import edu.kyndryl.academy.mscomun.entity.Alumno;
 
 @SpringBootApplication//clase de configuracion pendiente comentar
 @EnableDiscoveryClient //activamos el cliente eureka
-@EntityScan("edu.kyndryl.academy.mscomun.entity")//con esta anotación, ayudo a Spring a localizar las entidades, puesto que se encuentran en un paquete distintos del raíz
+@EntityScan({"edu.kyndryl.academy.mscomun.entity", "edu.kyndryl.academy.msalumnos.security.model"})//con esta anotación, ayudo a Spring a localizar las entidades, puesto que se encuentran en un paquete distintos del raíz
 //@ComponentScan //esta anotación, sería obligada para localizar COntroller, Service y Repository, si estuvieran en distintos paquetes del raíz
 @EnableFeignClients//activamos el feign
 public class MsalumnosprofeApplication {
