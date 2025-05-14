@@ -1,0 +1,39 @@
+services:
+  eureka:
+    build: ./eureka
+    ports:
+      - 8761:8761
+  gateway:
+    build: ./gateway
+    ports:
+      - 9090:9090
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_HOST: 172.17.0.1
+  alumnos:
+    build: ./msalumnos
+    ports:
+      - 8082:8082
+    depends_on:
+      - eureka
+    environment:
+      DB_HOST: host.docker.internal
+      EUREKA_HOST: 172.17.0.1
+  cursos:
+    build: ./mscursos
+    ports:
+      - 8085:8085
+    depends_on:
+      - eureka
+      - alumnos
+    environment:
+      DB_HOST: host.docker.internal
+      EUREKA_HOST: 172.17.0.1
+      IP_CURSOS: 172.17.0.1
+  cliente:
+    build: ./cliente
+    ports:
+      - 9000:9000
+    depends_on:
+      - alumnos

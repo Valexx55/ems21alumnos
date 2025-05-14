@@ -1,0 +1,3 @@
+from eclipse-temurin:17.0.14_7-jre-ubi9-minimal
+add msgateway-0.0.2.jar gateway.jar
+entrypoint java -jar gateway.jar
