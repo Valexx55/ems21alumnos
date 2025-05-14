@@ -61,7 +61,7 @@ import jakarta.validation.Valid;
  * 
  */
 //@Controller //sería si la capa de controller devuelve vistas (HTML, JSP)
-@CrossOrigin(originPatterns = {"*"}, methods = {RequestMethod.GET})
+@CrossOrigin(originPatterns = {"*"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController//le estoy diciendo que trabajo con JSON - de modo que si yo devuelvo un alumno , Spring automáticamente lo convierte a JSON
 @RequestMapping("/alumno") //especifo que las peticiones a esta clase serán del tipo http://dominio:puerto/alumno
 public class AlumnoController {

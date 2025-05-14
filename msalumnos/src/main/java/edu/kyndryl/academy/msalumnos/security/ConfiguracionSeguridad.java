@@ -138,17 +138,17 @@ public class ConfiguracionSeguridad {
 	}
 	
 	//TODO GENERAR LAS PASSWORDS DE LOS USUARIOS CIFRADAS
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		String pwd = "user";
 		var cripto = new BCryptPasswordEncoder();
 		String pwd_ucodificada = cripto.encode(pwd);
 		System.out.println("PWD USER " +pwd_ucodificada);
 		
-		String pwda = "admin";
+		String pwda = "ADMIN";
 		String pwd_acodificada = cripto.encode(pwda);
 		System.out.println("PWD USER " +pwd_acodificada);
 		
-	}*/
+	}
 	
 	
 	
